@@ -148,14 +148,14 @@ spec:
       #   - hosts:
       #       - *host
       hosts:
-        - host: 'octoprint.${SECRET_DOMAIN}'
+        - host: 'grafana.${SECRET_DOMAIN}'
           paths:
             - path: /
               pathType: Prefix
       tls:
         - hosts:
-            - 'octoprint.${SECRET_DOMAIN}'
-          secretName: 'octoprint-tls'
+            - 'grafana.${SECRET_DOMAIN}'
+          secretName: 'grafana-tls'
 
     serviceAccount:
       create: true
