@@ -26,6 +26,7 @@ spec:
     image:
       repository: octoprint/octoprint
       tag: 1.6.1
+      pullPolicy: IfNotPresent
     env:
       TZ: 'America/Denver'
     ingress:
@@ -44,11 +45,17 @@ spec:
           - hosts:
               - 'octoprint.${SECRET_DOMAIN}'
             secretName: 'octoprint-tls'
+    securityContext:
+      # -- (bool) Privileged securityContext may be required if USB devics are accessed directly through the host machine
+      privileged: true
     persistence:
       data:
         enabled: true
         existingClaim: octoprint-data
-      printer: '/dev/ttyUSB0'
+      printer:
+        enabled: false
+        type: hostPath
+        hostPath: /dev/ttyUSB0
     podAnnotations:
       configmap.reloader.stakater.com/reload: 'octoprint-data'
     resources:
