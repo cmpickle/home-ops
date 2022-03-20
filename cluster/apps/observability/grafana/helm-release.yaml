@@ -133,24 +133,24 @@ spec:
     # serviceMonitor:
     #   enabled: true
 
-  ingress:
-    enabled: true
-    ingressClassName: traefik
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-production
-      hajimari.io/enable: 'true'
-      hajimari.io/icon: chart-areaspline
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    hosts:
-      - &host 'grafana.${SECRET_DOMAIN}'
-    path: /
-    tls:
-      - hosts:
-          - *host
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-production
+        hajimari.io/enable: 'true'
+        hajimari.io/icon: chart-areaspline
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      hosts:
+        - &host 'grafana.${SECRET_DOMAIN}'
+      path: /
+      tls:
+        - hosts:
+            - *host
 
-  serviceAccount:
-    create: true
-    autoMount: true
+    serviceAccount:
+      create: true
+      autoMount: true
 
-  persistence:
-    enabled: false
+    persistence:
+      enabled: false
