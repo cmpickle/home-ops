@@ -5,7 +5,7 @@ metadata:
   name: octoprint
   namespace: default
 spec:
-  interval: ${DEBUG_INTERVAL}
+  interval: ${STANDARD_INTERVAL}
   chart:
     spec:
       chart: octoprint
@@ -14,7 +14,7 @@ spec:
         kind: HelmRepository
         name: k8s-at-home-charts
         namespace: flux-system
-      interval: ${DEBUG_INTERVAL}
+      interval: ${STANDARD_INTERVAL}
   install:
     createNamespace: true
     remediation:
