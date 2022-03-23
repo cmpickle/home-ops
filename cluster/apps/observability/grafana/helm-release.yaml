@@ -5,7 +5,7 @@ metadata:
   name: grafana
   namespace: observability
 spec:
-  interval: 1m
+  interval: ${DEBUG_INTERVAL}
   chart:
     spec:
       chart: grafana
@@ -14,7 +14,7 @@ spec:
         kind: HelmRepository
         name: grafana-charts
         namespace: flux-system
-      interval: 1m
+      interval: ${DEBUG_INTERVAL}
   install:
     createNamespace: true
     remediation:
