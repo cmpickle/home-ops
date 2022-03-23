@@ -55,7 +55,7 @@ spec:
       data:
         enabled: true
         existingClaim: octoprint-data
-        mountPath: /octoprint
+        mountPath: /octoprint/octoprint
       printer:
         enabled: false
         type: hostPath
