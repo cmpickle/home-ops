@@ -1,0 +1,107 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: plex
+  namespace: default
+spec:
+  interval: ${STANDARD_INTERVAL}
+  chart:
+    spec:
+      chart: plex
+      version: 6.2.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: ${STANDARD_INTERVAL}
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    image:
+      repository: ghcr.io/k8s-at-home/plex
+      tag: v1.24.1.4931-1a38e63c6
+      pullPolicy: IfNotPresent
+    env:
+      TZ: 'America/Denver'
+      ADVERTISE_IP: 'http://192.168.1.4:32400/, https://192.168.1.4:32400/, http://plex.${SECRET_DOMAIN}/, https://plex.${SECRET_DOMAIN}/'
+      ALLOWED_NETWORKS: '192.168.1.0/16'
+      PLEX_CLAIM: ${PLEX_CLAIM}
+      PLEX_PREFERENCE_1: 'FriendlyName=cmpickle Plex (Kubernetes)'
+      PLEX_PREFERENCE_2: 'EnableIPv6=0'
+      PLEX_PREFERENCE_3: 'logDebug=0'
+      PLEX_PREFERENCE_4: 'DisableTLSv1_0=1'
+      PLEX_PREFERENCE_5: 'LanNetworksBandwidth=xxx.xxx.xxx.0/18,xxx.xxx.xxx.0/24,xxx.xxx.xxx.0/24'
+      PLEX_PREFERENCE_6: 'TranscoderQuality=2'
+      PLEX_PREFERENCE_7: 'TreatWanIpAsLocal=0'
+      PLEX_PREFERENCE_8: 'TranscoderH264BackgroundPreset=fast'
+    # -- Configures service settings for the chart.
+    # @default -- See values.yaml
+    service:
+      main:
+        primary: true
+        ports:
+          http:
+            port: 32400
+      dnla-tcp:
+        enabled: false
+        type: NodePort
+        ports:
+          dnla-tcp:
+            enabled: true
+            port: 32469
+            protocol: TCP
+            targetPort: 32469
+        externalTrafficPolicy: Local
+      dnla-udp:
+        enabled: false
+        type: NodePort
+        ports:
+          dnla-udp:
+            enabled: true
+            port: 1900
+            protocol: TCP
+            targetPort: 1900
+        externalTrafficPolicy: Local
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: 'traefik'
+        annotations:
+          cert-manager.io/cluster-issuer: 'letsencrypt-production'
+          traefik.ingress.kubernetes.io/router.entrypoints: 'websecure'
+          hajimari.io/enable: 'true'
+          hajimari.io/icon: printer-3d-nozzle
+        hosts:
+          - host: 'plex.${SECRET_DOMAIN}'
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - 'plex.${SECRET_DOMAIN}'
+            secretName: 'plex-tls'
+    securityContext:
+      # -- (bool) Privileged securityContext may be required if USB devics are accessed directly through the host machine
+      privileged: true
+    persistence:
+      config:
+        enabled: true
+        existingClaim: plex-config
+        mountPath: /config
+
+      transcode:
+        enabled: true
+        existingClaim: plex-transcode
+        mountPath: /transcode
+    resources:
+      requests:
+        cpu: 200m
+        memory: 256Mi
+      limits:
+        memory: 8192Mi
