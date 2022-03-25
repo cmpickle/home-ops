@@ -5,7 +5,7 @@ metadata:
   name: plex
   namespace: default
 spec:
-  interval: ${DEBUG_INTERVAL}
+  interval: ${STANDARD_INTERVAL}
   chart:
     spec:
       chart: plex
@@ -14,7 +14,7 @@ spec:
         kind: HelmRepository
         name: k8s-at-home-charts
         namespace: flux-system
-      interval: ${DEBUG_INTERVAL}
+      interval: ${STANDARD_INTERVAL}
   install:
     createNamespace: true
     remediation:
@@ -91,14 +91,18 @@ spec:
         enabled: true
         existingClaim: plex-config
         mountPath: /config
-
       transcode:
         enabled: true
         existingClaim: plex-transcode
         mountPath: /transcode
+      nfs-media-pvc:
+        enabled: true
+        existingClaim: nfs-media-pvc
+        mountPath: /Data
+        readOnly: false
     resources:
       requests:
-        cpu: 200m
-        memory: 256Mi
+        cpu: 1000m
+        memory: 1500Mi
       limits:
-        memory: 8192Mi
+        memory: 9000Mi
