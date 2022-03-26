@@ -98,7 +98,7 @@ spec:
       nfs-media-pvc:
         enabled: true
         existingClaim: nfs-media-pvc
-        mountPath: /Data
+        mountPath: /data
         readOnly: false
     resources:
       requests:
