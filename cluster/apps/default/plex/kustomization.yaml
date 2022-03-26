@@ -4,4 +4,4 @@ resources:
   - config-pvc.yaml
   - transcode-pvc.yaml
   - media-pv.yaml
-#  - helm-release.yaml
+  - helm-release.yaml
