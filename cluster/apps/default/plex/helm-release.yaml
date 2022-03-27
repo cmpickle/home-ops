@@ -5,7 +5,7 @@ metadata:
   name: plex
   namespace: default
 spec:
-  interval: ${STANDARD_INTERVAL}
+  interval: ${DEBUG_INTERVAL}
   chart:
     spec:
       chart: plex
@@ -14,7 +14,7 @@ spec:
         kind: HelmRepository
         name: k8s-at-home-charts
         namespace: flux-system
-      interval: ${STANDARD_INTERVAL}
+      interval: ${DEBUG_INTERVAL}
   install:
     createNamespace: true
     remediation:
