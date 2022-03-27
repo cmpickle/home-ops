@@ -42,7 +42,7 @@ spec:
       tag: 2.8.1
       pullPolicy: IfNotPresent
     # imagePullSecrets:
-        # - name: docker
+    # - name: docker
     service:
       name: registry
       type: ClusterIP
@@ -58,8 +58,9 @@ spec:
       path: /
       # Used to create an Ingress record.
       hosts:
-        - docker.cameronpickle.com
-      annotations: {}
+        - docker.${SECRET_DOMAIN}
+      annotations:
+        {}
         # kubernetes.io/ingress.class: nginx
         # kubernetes.io/tls-acme: "true"
       labels: {}
@@ -68,7 +69,8 @@ spec:
         # - secretName: chart-example-tls
         #   hosts:
         #     - chart-example.local
-    resources: {}
+    resources:
+      {}
       # We usually recommend not to specify default resources and to leave this as a conscious
       # choice for the user. This also increases chances charts run on environments with little
       # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -92,8 +94,8 @@ spec:
     # Set this to name of secret for tls certs
     # tlsSecretName: registry.docker.example.com
     secrets:
-      haSharedSecret: ""
-      htpasswd: ""
+      haSharedSecret: ''
+      htpasswd: ''
     # Secrets for Azure
     #   azure:
     #     accountName: ""
@@ -144,9 +146,10 @@ spec:
       runAsUser: 1000
       fsGroup: 1000
 
-    priorityClassName: ""
+    priorityClassName: ''
 
-    podDisruptionBudget: {}
+    podDisruptionBudget:
+      {}
       # maxUnavailable: 1
       # minAvailable: 2
 

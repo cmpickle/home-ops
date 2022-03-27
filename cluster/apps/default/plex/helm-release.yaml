@@ -95,9 +95,18 @@ spec:
         enabled: true
         existingClaim: plex-transcode
         mountPath: /transcode
-      nfs-media-pvc:
+      # nfs-media-pvc:
+      #   enabled: true
+      #   existingClaim: nfs-media-pvc
+      #   mountPath: /data
+      #   readOnly: false
+      nfs-nas-media:
         enabled: true
-        existingClaim: nfs-media-pvc
+        type: custom
+        volumeSpec:
+          nfs:
+            server: '${NAS_ADDRESS}'
+            path: /mnt/block1/Plex/Plex
         mountPath: /data
         readOnly: false
     resources:
