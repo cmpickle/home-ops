@@ -100,15 +100,15 @@ spec:
       #   existingClaim: nfs-media-pvc
       #   mountPath: /data
       #   readOnly: false
-      nfs-nas-media:
-        enabled: true
-        type: custom
-        volumeSpec:
-          nfs:
-            server: ${NAS_ADDRESS}
-            path: /mnt/block1/Plex
-        mountPath: /data
-        readOnly: false
+      # nfs-nas-media:
+      #   enabled: true
+      #   type: custom
+      #   volumeSpec:
+      #     nfs:
+      #       server: ${NAS_ADDRESS}
+      #       path: /mnt/block1/Plex
+      #   mountPath: /data
+      #   readOnly: false
     resources:
       requests:
         cpu: 1000m
