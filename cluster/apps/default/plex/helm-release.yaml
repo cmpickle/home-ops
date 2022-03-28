@@ -106,7 +106,7 @@ spec:
         volumeSpec:
           nfs:
             server: '${NAS_ADDRESS}'
-            path: /mnt/block1/Plex/Plex
+            path: /mnt/block1/Plex
         mountPath: /data
         readOnly: false
     resources:
