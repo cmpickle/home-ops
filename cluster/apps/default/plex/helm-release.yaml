@@ -29,25 +29,35 @@ spec:
       pullPolicy: IfNotPresent
     env:
       TZ: 'America/Denver'
-      ADVERTISE_IP: 'http://192.168.1.4:32400/, https://192.168.1.4:32400/, http://plex.${SECRET_DOMAIN}/, https://plex.${SECRET_DOMAIN}/'
-      ALLOWED_NETWORKS: '192.168.1.0/16'
+      ADVERTISE_IP: 'http://${LB_PLEX_IP}:32400/, https://${LB_PLEX_IP}:32400/, http://plex.${SECRET_DOMAIN}/, https://plex.${SECRET_DOMAIN}/'
+      ALLOWED_NETWORKS: '${NETWORK_SUBNET}'
       PLEX_CLAIM: ${PLEX_CLAIM}
       PLEX_PREFERENCE_1: 'FriendlyName=cmpickle Plex (Kubernetes)'
       PLEX_PREFERENCE_2: 'EnableIPv6=0'
       PLEX_PREFERENCE_3: 'logDebug=0'
       PLEX_PREFERENCE_4: 'DisableTLSv1_0=1'
-      PLEX_PREFERENCE_5: 'LanNetworksBandwidth=xxx.xxx.xxx.0/18,xxx.xxx.xxx.0/24,xxx.xxx.xxx.0/24'
-      PLEX_PREFERENCE_6: 'TranscoderQuality=2'
+      PLEX_PREFERENCE_5: 'LanNetworksBandwidth=${NETWORK_SUBNET}'
+      PLEX_PREFERENCE_6: 'TranscoderH264OptionsOverride=ultrafast'
       PLEX_PREFERENCE_7: 'TreatWanIpAsLocal=0'
-      PLEX_PREFERENCE_8: 'TranscoderH264BackgroundPreset=fast'
+      PLEX_PREFERENCE_8: 'AllowedNetworks=${NETWORK_SUBNET}'
+      PLEX_PREFERENCE_9: 'DlnaEnabled=1'
+      PLEX_PREFERENCE_10: 'FSEventLibraryUpdatesEnabled=1'
     # -- Configures service settings for the chart.
     # @default -- See values.yaml
     service:
       main:
-        primary: true
-        ports:
-          http:
-            port: 32400
+        type: LoadBalancer
+        loadBalancerIP: ${LB_PLEX_IP}
+        externalTrafficPolicy: Local
+        annotations:
+          metallb.universe.tf/allow-shared-ip: plex
+          traefik.ingress.kubernetes.io/service.serverscheme: https
+        port:
+          port: 32400
+        # primary: true
+        # ports:
+        #   http:
+        #     port: 32400
       dnla-tcp:
         enabled: false
         type: NodePort
@@ -75,8 +85,10 @@ spec:
         annotations:
           cert-manager.io/cluster-issuer: 'letsencrypt-production'
           traefik.ingress.kubernetes.io/router.entrypoints: 'websecure'
+          traefik.ingress.kubernetes.io/router.priority: 150
           hajimari.io/enable: 'true'
           hajimari.io/icon: plex
+          hajimari.io/appName: Plex
         hosts:
           - host: 'plex.${SECRET_DOMAIN}'
             paths:
