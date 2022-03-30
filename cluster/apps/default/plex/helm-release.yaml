@@ -85,10 +85,10 @@ spec:
         annotations:
           cert-manager.io/cluster-issuer: 'letsencrypt-production'
           traefik.ingress.kubernetes.io/router.entrypoints: 'websecure'
-          traefik.ingress.kubernetes.io/router.priority: 150
+          traefik.ingress.kubernetes.io/router.priority: '150'
           hajimari.io/enable: 'true'
-          hajimari.io/icon: plex
-          hajimari.io/appName: Plex
+          hajimari.io/icon: 'plex'
+          hajimari.io/appName: 'Plex'
         hosts:
           - host: 'plex.${SECRET_DOMAIN}'
             paths:
