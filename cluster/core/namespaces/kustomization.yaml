@@ -3,6 +3,8 @@ kind: Kustomization
 resources:
   - artifacts.yaml
   - cert-manager.yaml
+  - home.yaml
+  - media.yaml
   - metallb-system.yaml
   - networking.yaml
   - observability.yaml

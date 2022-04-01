@@ -3,7 +3,9 @@ kind: Kustomization
 resources:
   - artifacts
   - default
+  - home
   - kube-system
+  - media
   - networking
   #  - observability/grafana
   - system-upgrade

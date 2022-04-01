@@ -3,9 +3,9 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: plex
-  namespace: default
+  namespace: media
 spec:
-  interval: ${DEBUG_INTERVAL}
+  interval: ${STANDARD_INTERVAL}
   chart:
     spec:
       chart: plex
@@ -14,7 +14,7 @@ spec:
         kind: HelmRepository
         name: k8s-at-home-charts
         namespace: flux-system
-      interval: ${DEBUG_INTERVAL}
+      interval: ${STANDARD_INTERVAL}
   install:
     createNamespace: true
     remediation:
@@ -42,8 +42,6 @@ spec:
       PLEX_PREFERENCE_8: 'AllowedNetworks=${NETWORK_SUBNET}'
       PLEX_PREFERENCE_9: 'DlnaEnabled=1'
       PLEX_PREFERENCE_10: 'FSEventLibraryUpdatesEnabled=1'
-    # -- Configures service settings for the chart.
-    # @default -- See values.yaml
     service:
       main:
         type: LoadBalancer
@@ -54,10 +52,6 @@ spec:
           traefik.ingress.kubernetes.io/service.serverscheme: https
         port:
           port: 32400
-        # primary: true
-        # ports:
-        #   http:
-        #     port: 32400
       dnla-tcp:
         enabled: false
         type: NodePort
@@ -107,11 +101,6 @@ spec:
         enabled: true
         existingClaim: plex-transcode
         mountPath: /transcode
-      # nfs-media-pvc:
-      #   enabled: true
-      #   existingClaim: nfs-media-pvc
-      #   mountPath: /data
-      #   readOnly: false
       nfs-nas-media:
         enabled: true
         type: custom
