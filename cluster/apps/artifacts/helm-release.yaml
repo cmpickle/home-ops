@@ -85,7 +85,7 @@ spec:
       data:
         enabled: true
         existingClaim: docker-registry-data
-        mountPath: /data
+        mountPath: /var/lib/registry
       # storageClass: '-'
 
     # set the type of filesystem to use: filesystem, s3
