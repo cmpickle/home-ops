@@ -1,0 +1,106 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: monica
+  namespace: home
+spec:
+  interval: ${DEBUG_INTERVAL}
+  chart:
+    spec:
+      chart: monica
+      version: 7.1.0
+      sourceRef:
+        kind: HelmRepository
+        name: k8s-at-home-charts
+        namespace: flux-system
+      interval: ${DEBUG_INTERVAL}
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    image:
+      repository: monica
+      tag: 3.7.0-apache
+      pullPolicy: IfNotPresent
+    env:
+      TZ: America/Denver
+      APP_ENV: production
+      APP_KEY: ${MONICA_APP_KEY}
+      APP_URL: https://monica.${SECRET_DOMAIN}
+      DB_HOST: monica-mariadb
+      DB_DATABASE: monica
+      DB_USERNAME: monica
+      DB_PASSWORD: ${MONICA_DB_PASSWORD}
+      DEFAULT_MAX_STORAGE_SIZE: 4096
+      MAIL_MAILER: smtp
+      MAIL_HOST: smtp.gmail.com
+      MAIL_PORT: 2587
+      MAIL_USERNAME: ${SECRET_EMAIL_USERNAME}
+      MAIL_PASSWORD: ${SECRET_EMAIL_PASSWORD}
+      MAIL_ENCRYPTION: tls
+      MAIL_FROM_ADDRESS: ${MONICA_MAIL_FROM_ADDRESS}
+      MAIL_FROM_NAME: Monica
+      APP_EMAIL_NEW_USERS_NOTIFICATION: true
+    # service:
+    #   main:
+    #     ports:
+    #       https:
+    #         ports: 80
+    ingress:
+      main:
+        enabled: true
+        ingressClassName: 'traefik'
+        annotations:
+          cert-manager.io/cluster-issuer: 'letsencrypt-production'
+          traefik.ingress.kubernetes.io/router.entrypoints: 'websecure'
+          hajimari.io/enable: 'true'
+          hajimari.io/icon: 'panda'
+          hajimari.io/appName: 'Monica'
+        hosts:
+          - host: 'monica.${SECRET_DOMAIN}'
+            paths:
+              - path: /
+                pathType: Prefix
+        tls:
+          - hosts:
+              - 'monica.${SECRET_DOMAIN}'
+            secretName: 'monica-tls'
+    persistence:
+      nfs-monica-pvc:
+        enabled: true
+        type: custom
+        volumeSpec:
+          nfs:
+            server: ${NAS_ADDRESS}
+            path: /mnt/block1/Plex/services/monica/data
+        mountPath: /var/www/html/storage
+        readOnly: false
+    mariadb:
+      enabled: true
+      architecture: standalone
+      auth:
+        database: monica
+        username: monica
+        password: ${MONICA_DB_PASSWORD}
+      primary:
+        persistence:
+          nfs-nas-monica:
+            enabled: true
+            type: custom
+            volumeSpec:
+              nfs:
+                server: ${NAS_ADDRESS}
+                path: /mnt/block1/Plex/services/monica/mysql
+            mountPath: /var/lib/mysql
+            readOnly: false
+    # resources:
+    #   requests:
+    #     cpu: 50m
+    #     memory: 200Mi
+    #   limits:
+    #     memory: 500Mi
