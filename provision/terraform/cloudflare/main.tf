@@ -91,14 +91,14 @@ resource "cloudflare_record" "ipv4" {
   ttl     = 1
 }
 
-resource "cloudflare_record" "root" {
-  name    = data.sops_file.cloudflare_secrets.data["cloudflare_domain"]
-  zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
-  value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
-  proxied = true
-  type    = "CNAME"
-  ttl     = 1
-}
+# resource "cloudflare_record" "root" {
+#   name    = data.sops_file.cloudflare_secrets.data["cloudflare_domain"]
+#   zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
+#   value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
+#   proxied = true
+#   type    = "CNAME"
+#   ttl     = 1
+# }
 
 resource "cloudflare_record" "hajimari" {
   name    = "hajimari"
@@ -111,6 +111,24 @@ resource "cloudflare_record" "hajimari" {
 
 resource "cloudflare_record" "echo_server" {
   name    = "echo-server"
+  zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
+  value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
+  proxied = true
+  type    = "CNAME"
+  ttl     = 1
+}
+
+resource "cloudflare_record" "SevenDTD" {
+  name    = "7dtd"
+  zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
+  value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
+  proxied = true
+  type    = "CNAME"
+  ttl     = 1
+}
+
+resource "cloudflare_record" "monica" {
+  name    = "monica"
   zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
   value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
   proxied = true
