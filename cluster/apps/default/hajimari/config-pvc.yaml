@@ -5,12 +5,15 @@ metadata:
   name: hajimari-config-pv
   namespace: default
 spec:
-  storageClassName: local-path
+  storageClassName: local
   capacity:
     storage: 1Mi
+  volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain
+  local:
+    path: /local-path/hajimari-config
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
