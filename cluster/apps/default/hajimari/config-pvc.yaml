@@ -7,7 +7,7 @@ metadata:
 spec:
   storageClassName: local
   capacity:
-    storage: 1Mi
+    storage: 128Mi
   volumeMode: Filesystem
   accessModes:
     - ReadWriteMany
@@ -31,7 +31,8 @@ metadata:
 spec:
   accessModes:
     - ReadWriteOnce
-  storageClassName: local-path
+  storageClassName: local
+  volumeName: hajimari-config-pv
   resources:
     requests:
       storage: 128Mi
