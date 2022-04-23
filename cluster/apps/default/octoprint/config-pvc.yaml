@@ -8,7 +8,6 @@ spec:
   accessModes:
     - ReadWriteOnce
   storageClassName: local-path
-  reclaimPolicy: Retain
   resources:
     requests:
       storage: 5Gi
