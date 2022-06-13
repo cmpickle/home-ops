@@ -91,17 +91,26 @@ resource "cloudflare_record" "ipv4" {
   ttl     = 1
 }
 
-# resource "cloudflare_record" "root" {
-#   name    = data.sops_file.cloudflare_secrets.data["cloudflare_domain"]
-#   zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
-#   value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
-#   proxied = true
-#   type    = "CNAME"
-#   ttl     = 1
-# }
+resource "cloudflare_record" "SevenDTD" {
+  name    = "7dtd"
+  zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
+  value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
+  proxied = true
+  type    = "CNAME"
+  ttl     = 1
+}
 
-resource "cloudflare_record" "hajimari" {
-  name    = "hajimari"
+resource "cloudflare_record" "blog" {
+  name    = "blog"
+  zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
+  value   = "hashnode.network"
+  proxied = false
+  type    = "CNAME"
+  ttl     = 1
+}
+
+resource "cloudflare_record" "docker" {
+  name    = "docker"
   zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
   value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
   proxied = true
@@ -118,8 +127,35 @@ resource "cloudflare_record" "echo_server" {
   ttl     = 1
 }
 
-resource "cloudflare_record" "SevenDTD" {
-  name    = "7dtd"
+resource "cloudflare_record" "grafana" {
+  name    = "grafana"
+  zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
+  value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
+  proxied = true
+  type    = "CNAME"
+  ttl     = 1
+}
+
+resource "cloudflare_record" "hajimari" {
+  name    = "hajimari"
+  zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
+  value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
+  proxied = true
+  type    = "CNAME"
+  ttl     = 1
+}
+
+resource "cloudflare_record" "hass" {
+  name    = "hass"
+  zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
+  value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
+  proxied = true
+  type    = "CNAME"
+  ttl     = 1
+}
+
+resource "cloudflare_record" "minecraft" {
+  name    = "minecraft"
   zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
   value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
   proxied = true
@@ -129,6 +165,42 @@ resource "cloudflare_record" "SevenDTD" {
 
 resource "cloudflare_record" "monica" {
   name    = "monica"
+  zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
+  value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
+  proxied = true
+  type    = "CNAME"
+  ttl     = 1
+}
+
+resource "cloudflare_record" "monitor" {
+  name    = "monitor"
+  zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
+  value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
+  proxied = true
+  type    = "CNAME"
+  ttl     = 1
+}
+
+resource "cloudflare_record" "octoprint" {
+  name    = "octoprint"
+  zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
+  value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
+  proxied = true
+  type    = "CNAME"
+  ttl     = 1
+}
+
+resource "cloudflare_record" "plex" {
+  name    = "plex"
+  zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
+  value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
+  proxied = true
+  type    = "CNAME"
+  ttl     = 1
+}
+
+resource "cloudflare_record" "partner_fulfillment" {
+  name    = "partner-fulfillment"
   zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
   value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
   proxied = true
