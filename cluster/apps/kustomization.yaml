@@ -5,7 +5,7 @@ resources:
   - default
   - home
   - kube-system
-  - media
+  # - media
   - networking
   # - observability/grafana
   - system-upgrade
