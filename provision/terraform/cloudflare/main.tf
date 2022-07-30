@@ -216,3 +216,21 @@ resource "cloudflare_record" "vibe" {
   type    = "CNAME"
   ttl     = 1
 }
+
+resource "cloudflare_record" "gopuff-test-store" {
+  name    = "gopuff-test-store"
+  zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
+  value   = "23.227.38.65"
+  proxied = false
+  type    = "A"
+  ttl     = 1
+}
+
+resource "cloudflare_record" "fitness_tracker" {
+  name    = "fitness-tracker"
+  zone_id = lookup(data.cloudflare_zones.domain.zones[0], "id")
+  value   = "ipv4.${data.sops_file.cloudflare_secrets.data["cloudflare_domain"]}"
+  proxied = true
+  type    = "CNAME"
+  ttl     = 1
+}
